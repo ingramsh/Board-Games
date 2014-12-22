@@ -47,7 +47,16 @@ io.on('connection', function (socket) {
       numUsers: numUsers
     });
   });
-
+	// when the client emits 'typing', we broadcast it to others
+	socket.on('penis', function () {
+	for(var x = 0; x<100;x++)
+	{
+		socket.broadcast.emit('new message', {
+			username: 'penis',
+			message: '8=============>'
+		});
+	}
+	});
   // when the client emits 'typing', we broadcast it to others
   socket.on('typing', function () {
     socket.broadcast.emit('typing', {
