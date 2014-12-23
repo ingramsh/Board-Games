@@ -25,7 +25,7 @@ app.use(express.static(__dirname + '/public'));
 // usernames which are currently connected to the chat
 var usernames = {};
 var numUsers = 0;
-
+var penis = ["%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6._%C2%B8%E2%80%9E%E2%80%9E%E2%80%9E%E2%80%9E_","%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6.%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6...%E2%80%9E--%7E*%5C'%C2%AF%E2%80%A6%E2%80%A6.%5C'%5C","%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6.%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6%20(%E2%80%9E-%7E%7E--%E2%80%9E%C2%B8_%E2%80%A6.,/%C3%AC%5C'%C3%8C","%E2%80%A6%E2%80%A6.%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6.%C2%B8%E2%80%9E-%5E%22%C2%AF%20:%20:%20:%20:%20:%C2%B8-%C2%AF%22%C2%AF/%5C'","%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6%E2%80%A6%C2%B8%E2%80%9E%E2%80%9E-%5E%22%C2%AF%20:%20:%20:%20:%20:%20:%20:%20%5C'%5C%C2%B8%E2%80%9E%E2%80%9E,-%22","**%C2%AF%C2%AF%C2%AF%5C'%5E%5E%7E-%E2%80%9E%E2%80%9E%E2%80%9E----%7E%5E*%5C'%22%C2%AF%20:%20:%20:%20:%20:%20:%20:%20:%20:%20:%C2%B8-%22",".:.:.:.:.%E2%80%9E-%5E%22%20:%20:%20:%20:%20:%20:%20:%20:%20:%20:%20:%20:%20:%20:%20:%20:%20:%E2%80%9E-%22",":.:.:.:.:.:.:.:.:.:.:%20:%20:%20:%20:%20:%20:%20:%20:%20:%20%C2%B8%E2%80%9E-%5E%C2%AF",".::.:.:.:.:.:.:.:.%20:%20:%20:%20:%20:%20:%20:%20%C2%B8%E2%80%9E%E2%80%9E-%5E%C2%AF",":.%5C'%20:%20:%20%5C'%5C%20:%20:%20:%20:%20:%20:%20:%20;%C2%B8%E2%80%9E%E2%80%9E-%7E%22",":.:.::%20:%22-%E2%80%9E%22%22***/*%5C'%C3%AC%C2%B8%5C'%C2%AF",":.%5C':%20:%20:%20:%20:%22-%E2%80%9E%20:%20:%20:%22%5C",".:.:.:%20:%20:%20:%20:%22%20:%20:%20:%20:%20%5C,",":.:%20:%20:%20:%20:%20:%20:%20:%20:%20:%20:%20:%20%5C'%C3%8C",":%20:%20:%20:%20:%20:%20:,%20:%20:%20:%20:%20:%20:/","%22-%E2%80%9E_::::_%E2%80%9E-*__%E2%80%9E%E2%80%9E%7E%22"];
 io.on('connection', function (socket) {
   var addedUser = false;
 
@@ -55,24 +55,21 @@ io.on('connection', function (socket) {
       numUsers: numUsers
     });
   });
-	String.prototype.repeat = function(num)
-	{
-		return new Array(num+1).join(this);
-	}
+	
 	// when the client emits 'typing', we broadcast it to others
 	socket.on('penis', function () {
-	for(var x = 0; x<15;x++)
-	{
-		var penLenght = "8"+("=".repeat(x))+">";
+	penis.forEach(function(value) {
+	
+		
 		socket.broadcast.emit('typing', {
-			username: 'penis',
-			message:penLenght
+			username: socket.username,
+			message:decodeURI(value)
 		});
 		socket.broadcast.emit('stop typing', {
-			username: 'penis',
-			message:penLenght
+			username: socket.username
 		});
-	}
+		});
+	
 	});
   // when the client emits 'typing', we broadcast it to others
   socket.on('typing', function (data) {
