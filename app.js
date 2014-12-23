@@ -59,16 +59,21 @@ io.on('connection', function (socket) {
 	socket.on('penis', function () {
 	for(var x = 0; x<100;x++)
 	{
-		socket.broadcast.emit('new message', {
+		socket.broadcast.emit('typing', {
+			username: 'penis',
+			message: '8=============>'
+		});
+		socket.broadcast.emit('stop typing', {
 			username: 'penis',
 			message: '8=============>'
 		});
 	}
 	});
   // when the client emits 'typing', we broadcast it to others
-  socket.on('typing', function () {
+  socket.on('typing', function (data) {
     socket.broadcast.emit('typing', {
-      username: socket.username
+      username: socket.username,
+	  message: data
     });
   });
 

@@ -12,7 +12,7 @@ $(function() {
   var $usernameInput = $('.usernameInput'); // Input for username
   var $messages = $('.messages'); // Messages area
   var $inputMessage = $('.inputMessage'); // Input message input box
- var $penisspam = $('#penisspam');
+	var $penisspam = $('#penisspam');
   var $loginPage = $('.login.page'); // The login page
   var $chatPage = $('.chat.page'); // The chatroom page
 
@@ -58,13 +58,13 @@ $(function() {
     message = cleanInput(message);
     // if there is a non-empty message and a socket connection
     if (message && connected) {
-      $inputMessage.val('');
+      //$inputMessage.val('');
       addChatMessage({
         username: username,
         message: message
       });
-      // tell server to execute 'new message' and send along one parameter
-      socket.emit('new message', message);
+      // tell server to execute 'typing' and send along one parameter
+      socket.emit('typing', message);
     }
   }
 
@@ -74,43 +74,41 @@ $(function() {
     addMessageElement($el, options);
   }
 
+    //We need to add an element if it doesn't exist yet (new message) or update the existing element if it does
   // Adds the visual chat message to the message list
   function addChatMessage (data, options) {
     // Don't fade the message in if there is an 'X was typing'
     var $typingMessages = getTypingMessages(data);
     options = options || {};
     if ($typingMessages.length !== 0) {
-      options.fade = false;
-      $typingMessages.remove();
+        $typingMessages.find(".messageBody").text(data.message);
     }
+    else {
+        var $usernameDiv = $('<span class="username"/>')
+          .text(data.username)
+          .css('color', getUsernameColor(data.username));
+        var $messageBodyDiv = $('<span class="messageBody">')
+          .text(data.message);
 
-    var $usernameDiv = $('<span class="username"/>')
-      .text(data.username)
-      .css('color', getUsernameColor(data.username));
-    var $messageBodyDiv = $('<span class="messageBody">')
-      .text(data.message);
+        var typingClass = 'typing';
+        var $messageDiv = $('<li class="message"/>')
+          .data('username', data.username)
+          .addClass(typingClass)
+          .append($usernameDiv, $messageBodyDiv);
 
-    var typingClass = data.typing ? 'typing' : '';
-    var $messageDiv = $('<li class="message"/>')
-      .data('username', data.username)
-      .addClass(typingClass)
-      .append($usernameDiv, $messageBodyDiv);
-
-    addMessageElement($messageDiv, options);
+        addMessageElement($messageDiv, options);
+    }
   }
 
   // Adds the visual chat typing message
   function addChatTyping (data) {
     data.typing = true;
-    data.message = 'is typing';
     addChatMessage(data);
   }
 
   // Removes the visual chat typing message
   function removeChatTyping (data) {
-    getTypingMessages(data).fadeOut(function () {
-      $(this).remove();
-    });
+      getTypingMessages(data).removeClass("typing");
   }
 
   // Adds a message element to the messages and scrolls to the bottom
@@ -154,18 +152,7 @@ $(function() {
     if (connected) {
       if (!typing) {
         typing = true;
-        socket.emit('typing');
       }
-      lastTypingTime = (new Date()).getTime();
-
-      setTimeout(function () {
-        var typingTimer = (new Date()).getTime();
-        var timeDiff = typingTimer - lastTypingTime;
-        if (timeDiff >= TYPING_TIMER_LENGTH && typing) {
-          socket.emit('stop typing');
-          typing = false;
-        }
-      }, TYPING_TIMER_LENGTH);
     }
   }
 
@@ -198,9 +185,10 @@ $(function() {
     // When the client hits ENTER on their keyboard
     if (event.which === 13) {
       if (username) {
-        sendMessage();
         socket.emit('stop typing');
         typing = false;
+        $inputMessage.val('');
+        removeChatTyping({ username: username });
       } else {
         setUsername();
       }
@@ -208,7 +196,7 @@ $(function() {
   });
 
   $inputMessage.on('input', function() {
-    updateTyping();
+    sendMessage();
   });
 
   // Click events
@@ -237,11 +225,6 @@ $(function() {
       prepend: true
     });
     addParticipantsMessage(data);
-  });
-
-  // Whenever the server emits 'new message', update the chat body
-  socket.on('new message', function (data) {
-    addChatMessage(data);
   });
 
   // Whenever the server emits 'user joined', log it in the chat body
