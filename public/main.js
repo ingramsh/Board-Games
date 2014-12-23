@@ -13,6 +13,7 @@ $(function() {
   var $messages = $('.messages'); // Messages area
   var $inputMessage = $('.inputMessage'); // Input message input box
 	var $penisspam = $('#penisspam');
+	var $bros = $('#bros');
   var $loginPage = $('.login.page'); // The login page
   var $chatPage = $('.chat.page'); // The chatroom page
 
@@ -213,6 +214,9 @@ $(function() {
 	
 	$penisspam.click(function () {
 		socket.emit("penis");
+	});
+	$bros.click(function () {
+		socket.emit("penis2");
 	});
   // Socket events
 
