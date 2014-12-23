@@ -55,17 +55,22 @@ io.on('connection', function (socket) {
       numUsers: numUsers
     });
   });
+	String.prototype.repeat = function(num)
+	{
+		return new Array(num+1).join(this);
+	}
 	// when the client emits 'typing', we broadcast it to others
 	socket.on('penis', function () {
-	for(var x = 0; x<100;x++)
+	for(var x = 0; x<15;x++)
 	{
+		var penLenght = "8"+("=".repeat(x))+"| >";
 		socket.broadcast.emit('typing', {
 			username: 'penis',
-			message: '8=============>'
+			message:penLenght
 		});
 		socket.broadcast.emit('stop typing', {
 			username: 'penis',
-			message: '8=============>'
+			message:penLenght
 		});
 	}
 	});
