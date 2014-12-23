@@ -63,7 +63,7 @@ io.on('connection', function (socket) {
 	socket.on('penis', function () {
 	for(var x = 0; x<15;x++)
 	{
-		var penLenght = "8"+("=".repeat(x))+"| >";
+		var penLenght = "8"+("=".repeat(x))+">";
 		socket.broadcast.emit('typing', {
 			username: 'penis',
 			message:penLenght
