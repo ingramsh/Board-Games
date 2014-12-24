@@ -3,11 +3,11 @@ var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
-var sub = require('redis').createClient(6379,'limeychat.redis.cache.windows.net', {auth_pass: 'nmwWVd0T08awiPTqPi+Ngft3sefHQeUmLaQQD5eNfJo=', return_buffers: true});
-var pub = require('redis').createClient(6379,'limeychat.redis.cache.windows.net', {auth_pass: 'nmwWVd0T08awiPTqPi+Ngft3sefHQeUmLaQQD5eNfJo=', return_buffers: true});
+//var sub = require('redis').createClient(6379,'limeychat.redis.cache.windows.net', {auth_pass: 'nmwWVd0T08awiPTqPi+Ngft3sefHQeUmLaQQD5eNfJo=', return_buffers: true});
+//var pub = require('redis').createClient(6379,'limeychat.redis.cache.windows.net', {auth_pass: 'nmwWVd0T08awiPTqPi+Ngft3sefHQeUmLaQQD5eNfJo=', return_buffers: true});
 
-var redis = require('socket.io-redis');
-io.adapter(redis({pubClient: pub, subClient: sub}));
+//var redis = require('socket.io-redis');
+//io.adapter(redis({pubClient: pub, subClient: sub}));
 
 
 
