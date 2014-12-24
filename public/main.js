@@ -218,13 +218,35 @@ $(function() {
 	$bros.click(function () {
 		socket.emit("penis2");
 	});
-  // Socket events
-
+    // Socket events
+	var activePage = true;
+	var backlogCount = 0;
+	$(window).on("blur focus", function (e) {
+	    var prevType = $(this).data("prevType");
+	    if (prevType != e.type) {   //  reduce double fire issues
+	        switch (e.type) {
+	            case "blur":
+	                activePage = false;
+	                break;
+                    
+	            case "focus":
+	                activePage = true;
+	                backlogCount = 0;
+	                setPageTitle();
+	                break;
+	        }
+	    }
+	    $(this).data("prevType", e.type);
+	})
+	function setPageTitle()
+	{
+	    document.title = 'LimeyChat ' + (backlogCount > 0 ? "(" + backlogCount + ")" : "");
+	}
   // Whenever the server emits 'login', log the login message
   socket.on('login', function (data) {
     connected = true;
     // Display the welcome message
-    var message = "Welcome to Socket.IO Chat &mdash; ";
+    var message = "Welcome to LimeyChat @LimeyJohnson; ";
     log(message, {
       prepend: true
     });
@@ -233,7 +255,7 @@ $(function() {
 
   // Whenever the server emits 'user joined', log it in the chat body
   socket.on('user joined', function (data) {
-    log(data.username + ' joined');
+      log(data.username + ' joined from ' + data.ip.address);
     addParticipantsMessage(data);
   });
 
@@ -251,6 +273,8 @@ $(function() {
 
   // Whenever the server emits 'stop typing', kill the typing message
   socket.on('stop typing', function (data) {
-    removeChatTyping(data);
+      removeChatTyping(data);
+      if (!activePage) backlogCount++;
+      setPageTitle();
   });
 });
