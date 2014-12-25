@@ -50,6 +50,10 @@ io.on('connection', function (socket) {
             numUsers: numUsers,
             ip: socket.handshake.address
         });
+        console.log("socket.handshake : " + socket.handshake);
+        console.log("socket.handshake.address: " + socket.handshake.address);
+        
+       
     });
 
     // when the client emits 'typing', we broadcast it to others
