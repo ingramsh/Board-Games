@@ -73,6 +73,7 @@ io.on('connection', function (socket) {
             username: socket.username,
             message: data
         });
+        console.log("typing: " + socket.username);
     });
 
     // when the client emits 'stop typing', we broadcast it to others
