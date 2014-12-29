@@ -48,11 +48,9 @@ io.on('connection', function (socket) {
         socket.broadcast.emit('user joined', {
             username: socket.username,
             numUsers: numUsers,
-            ip: socket.handshake.address
+            ip: socket.request.connection.remoteAddress
         });
-        console.log("socket.handshake : " + socket.handshake);
-        console.log("socket.handshake.address: " + socket.handshake.address);
-        
+        console.log("socket.request.connection.remoteAddress: " + socket.request.connection.remoteAddress);
        
     });
 
@@ -68,6 +66,7 @@ io.on('connection', function (socket) {
                     username: socket.username
                 });
             });
+			console.log("special["+ data.name+"]: " + socket.request.connection.remoteAddress);
         }
     });
 
@@ -77,7 +76,6 @@ io.on('connection', function (socket) {
             username: socket.username,
             message: data
         });
-        console.log("typing: " + socket.username);
     });
 
     // when the client emits 'stop typing', we broadcast it to others
@@ -85,6 +83,8 @@ io.on('connection', function (socket) {
         socket.broadcast.emit('stop typing', {
             username: socket.username
         });
+		console.log("stop typing: " + socket.request.connection.remoteAddress);
+       
     });
 
     // when the user disconnects.. perform this
