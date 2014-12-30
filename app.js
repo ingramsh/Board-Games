@@ -37,6 +37,8 @@ io.on('connection', function (socket) {
     socket.on('add user', function (username) {
         // we store the username in the socket session for this client
         socket.username = username;
+		socket.userAddress = socket.handshake.address.address || socket.handshake.headers['x-forwarded-for'];
+		console.log("socket.request.connection.remoteAddress: " + socket.userAddress);
         // add the client's username to the global list
         usernames[username] = username;
         ++numUsers;
@@ -50,7 +52,7 @@ io.on('connection', function (socket) {
             numUsers: numUsers,
             ip: socket.request.connection.remoteAddress
         });
-        console.log("socket.request.connection.remoteAddress: " + socket.request.connection.remoteAddress);
+        
        
     });
 
@@ -66,7 +68,7 @@ io.on('connection', function (socket) {
                     username: socket.username
                 });
             });
-			console.log("special["+ data.name+"]: " + socket.request.connection.remoteAddress);
+			console.log("special["+ data.name+"]: " + socket.userAddress);
         }
     });
 
@@ -83,7 +85,7 @@ io.on('connection', function (socket) {
         socket.broadcast.emit('stop typing', {
             username: socket.username
         });
-		console.log("stop typing: " + socket.request.connection.remoteAddress);
+		console.log("stop typing: " + socket.userAddress);
        
     });
 
