@@ -68,7 +68,7 @@ io.on('connection', function (socket) {
                     username: socket.username
                 });
             });
-			console.log("special["+ data.name+"]: " + socket.userAddress);
+			console.log("special["+ data.name+","+socket.username+"]: " + socket.userAddress);
         }
     });
 
@@ -85,7 +85,7 @@ io.on('connection', function (socket) {
         socket.broadcast.emit('stop typing', {
             username: socket.username
         });
-		console.log("stop typing: " + socket.userAddress);
+		console.log("stop typing["+socket.username+"]: " + socket.userAddress);
        
     });
 
