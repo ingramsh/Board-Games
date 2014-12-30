@@ -37,7 +37,7 @@ io.on('connection', function (socket) {
     socket.on('add user', function (username) {
         // we store the username in the socket session for this client
         socket.username = username;
-		socket.userAddress = socket.handshake.address.address || socket.handshake.headers['x-forwarded-for'];
+		socket.userAddress = socket.handshake.headers['x-forwarded-for'] || socket.handshake.address.address;
 		console.log("socket.request.connection.remoteAddress: " + socket.userAddress);
         // add the client's username to the global list
         usernames[username] = username;
