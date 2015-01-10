@@ -28,22 +28,40 @@ ul {
   word-wrap: break-word;
 }
 
+/* Layout */
+
+.left{
+    width: 400px;
+    Float: left;
+    margin: 0;
+    padding: 0;
+    display: inline;
+    height:100%;
+}
+.right{
+ 
+    width: 800px;
+    float: left;
+    margin: 0;
+    padding: 0;
+    display: inline;
+    height:800px;
+
+}
+canvas{
+    height:800px;
+    width:800px;
+    border-style:solid;
+    border-width:2px;
+}
 /* Pages */
+.pages{height:100%;}
 
-.pages {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-}
-
-.page {
-  height: 100%;
-  position: absolute;
-  width: 100%;
-}
 
 /* Login Page */
+.login{
+    height:100%;
+}
 
 .login.page {
   background-color: #000;
@@ -84,11 +102,12 @@ ul {
 }
 
 /* Chat page */
-
-.chat.page {
-  display: none;
+.chat{
+    height:100%;
 }
-
+.main{
+    display:none;
+}
 /* Font */
 
 .messages {
@@ -143,5 +162,5 @@ ul {
   padding-left: 10px;
   position: absolute;
   right: 0;
-  width: 100%;
+  width: 400px;
 }

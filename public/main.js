@@ -12,11 +12,10 @@ $(function () {
     var $usernameInput = $('.usernameInput'); // Input for username
     var $messages = $('.messages'); // Messages area
     var $inputMessage = $('.inputMessage'); // Input message input box
-    var $penisspam = $('#penisspam');
-    var $bros = $('#bros');
     var $loginPage = $('.login.page'); // The login page
-    var $chatPage = $('.chat.page'); // The chatroom page
-
+    var $chatPage = $('.main'); // The chatroom page
+    var $canvas = document.getElementById('canvas');
+    var context = $canvas.getContext("2d");
     // Prompt for setting a username
     var username;
     var connected = false;
@@ -212,11 +211,6 @@ $(function () {
         $inputMessage.focus();
     });
 
-    $("input[type='button']").click(function () {
-        if ($(this).attr("special")) {
-            socket.emit("special", { name: $(this).attr("special") })
-        }
-    });
     // Socket events
     var activePage = true;
     var backlogCount = 0;
@@ -275,4 +269,56 @@ $(function () {
         if (!activePage) backlogCount++;
         setPageTitle();
     });
+
+    /*Canvas events*/
+    var drawing = false;
+    var clickx = new Array();
+    var clicky = new Array();
+    var clickDrag = new Array();
+
+    $('#canvas').mousemove(function (e) {
+        console.log("mousemove");
+        if (drawing) {
+            addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, true);
+            redraw();
+        }
+    });
+    $('#canvas').mousedown(function (e) {
+        drawing = true;
+        addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, false);
+        redraw();
+    });
+    $('#canvas').mouseup(function () {
+        drawing = false;
+        console.log("mousedown");
+    });
+    $('#canvas').mouseleave(function () {
+        drawing = false;
+        console.log("mouseleave");
+    });
+   
+    function addClick(x, y, dragging) {
+        clickx.push(x);
+        clicky.push(y);
+        clickDrag.push(dragging)
+    }
+    function redraw()
+    {
+        context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+        context.strokeStyle = "#df4b26";
+        context.lineJoin = "round";
+        context.lineWidth = 5;
+
+        for (var i = 0; i < clickx.length; i++) {
+            context.beginPath();
+            if (clickDrag[i] && i) {
+                context.moveTo(clickx[i - 1], clicky[i - 1]);
+            } else {
+                context.moveTo(clickx[i] - 1, clicky[i]);
+            }
+            context.lineTo(clickx[i], clicky[i]);
+            context.closePath();
+            context.stroke();
+        }
+    }
 });
